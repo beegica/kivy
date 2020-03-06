@@ -147,6 +147,7 @@ class WindowSDL(WindowBase):
     _do_resize_ev = None
 
     def __init__(self, **kwargs):
+        self.set_swap = False
         self._pause_loop = False
         self._win = _WindowSDL2Storage()
         super(WindowSDL, self).__init__()
@@ -200,6 +201,7 @@ class WindowSDL(WindowBase):
                   minimum_height=self._set_minimum_size)
 
         self.bind(allow_screensaver=self._set_allow_screensaver)
+
 
     def get_window_info(self):
         return self._win.get_window_info()
@@ -311,6 +313,19 @@ class WindowSDL(WindowBase):
         super(WindowSDL, self).create_window()
         # set mouse visibility
         self._set_cursor_state(self.show_cursor)
+
+        # set swap interval
+        interval = Config.get('graphics', 'swap')
+        if (interval != '') & (not self.set_swap):
+            res, err = self._win.set_swap_interval(int(interval))
+            if (res == -1):
+                Logger.warning("SWAP: %s" % (err))
+            else:
+                Logger.info("SWAP: Swap Interval set to %i" %
+                            (int(interval)))
+            self.set_swap = True
+        else:
+            Logger.info("SWAP: Swap not set")
 
         if self.initialized:
             return

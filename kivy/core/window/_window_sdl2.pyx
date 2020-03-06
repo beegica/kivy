@@ -324,6 +324,12 @@ cdef class _WindowSDL2Storage:
         else:
             SDL_DisableScreenSaver()
 
+    def set_swap_interval(self, int interval):
+        res = SDL_GL_SetSwapInterval(interval)
+        if (res == -1) & (interval < 0):
+            res = SDL_GL_SetSwapInterval(1)
+        return res, SDL_GetError()
+
     def maximize_window(self):
         SDL_MaximizeWindow(self.win)
 

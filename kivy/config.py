@@ -880,6 +880,9 @@ if not environ.get('KIVY_DOC_INCLUDE'):
         elif version == 20:
             Config.setdefault('network', 'useragent', 'curl')
 
+        elif version == 21:
+            Config.setdefault('graphics', 'swap',  '')
+
         else:
             # for future.
             break
